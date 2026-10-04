@@ -114,10 +114,25 @@ ZMK v0.4系への移行により、以前のキーマップ、トラックボー
 | `&studio_unlock` を `ble_win` / `ble_mac` レイヤー右上に配置 | `config/mona2.keymap` |
 | 全レイヤーに `display-name` を設定 | `config/mona2.keymap` |
 | `studio-rpc-usb-uart` snippet (中央側) / ボード名を `xiao_ble/nrf52840/zmk` へ | `build.yaml` |
+| **JIS配列PC向け記号変換モジュール (`&tog_ls`) を追加** | `modules/jis_layout_shift/`, `zephyr/module.yml`, `config/mona2.keymap`, `config/mona2_r.conf` |
 
 > **Note:**
 > - DYA Studio で行った変更は **中央側 (右手) の Flash** に保存されます。初期化したい場合は `settings_reset` ファームウェアを書き込んでください。
 > - **ZMK v0.4 系への移行に伴い、以前の設定（保存済みキーマップ・トラックボール設定）は引き継がれません。** 書き込み後に DYA Studio から設定し直してください。
+
+## JIS配列のPCで使う (`&tog_ls`)
+
+OS のキーボード設定が JIS (日本語配列) の PC でも、US 配列の刻印どおりに記号 (`@` `=` `[` `:` `_` など) を入力できるようにするモジュールを `modules/jis_layout_shift/` に同梱しています ([kot149/zmk-layout-shift](https://github.com/kot149/zmk-layout-shift) と同等の US→JIS 変換)。
+
+- **切り替え**: `BLE_W` レイヤーの右手 2 行目・左から 3 番目 (`BT1` の下) の `&tog_ls` で ON/OFF。状態は再起動後も保持されます。
+- **仕組み**: `&kp` を配列対応版に差し替え、JIS モード中だけキーコードを変換します。OFF のときは通常の `&kp` と同じ動作です。
+- **DYA Studio との互換性**: `&kp` のデバイス名 (`key_press`) と表示名 (Key Press) は変えていません。そのため、Studio で保存済みのキーマップ・マクロ・コンボはそのまま使え、Studio から割り当てた `&kp` も変換されます。
+- **追加される behavior** (Studio のキーマップエディタから割り当て可能):
+  - `JIS/US Toggle` (`&tog_ls`)
+  - `JIS Mode On` (`&tog_ls_on`) / `JIS Mode Off` (`&tog_ls_off`)
+  - `Key Press (No JIS)` (`&kp_raw`): JIS モード中でも変換しないキー入力
+- IME 切り替えマクロ `&henkan` の GRAVE は変換されないよう `&kp_raw` にしています。
+- 注意: JIS モード中は `GRAVE` が「`」として送られるため、JIS キーボードの「半角/全角」としては働きません。
 
 ## ZMK v0.4 系への移行で変わった点
 

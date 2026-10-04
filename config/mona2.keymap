@@ -3,6 +3,12 @@
 #include <zephyr/dt-bindings/input/input-event-codes.h>
 #include <behaviors/runtime-sensor-rotate.dtsi>
 #include <behaviors.dtsi>
+/* JIS配列のPCでもUS配列の刻印どおりに記号を入力するためのモジュール
+   (modules/jis_layout_shift)。`&kp` を配列対応版に差し替え、`&tog_ls` で
+   JIS変換の ON/OFF を切り替える。`&kp` のデバイス名 (key_press) と表示名は
+   変えていないので、DYA Studio で保存済みのキーマップ / マクロ / コンボはそのまま使える。
+   必ず behaviors.dtsi の後に include すること。 */
+#include <jis_layout_shift.dtsi>
 /* DYA Studio から作成したマクロを呼び出す `&rmacro <slot>` を定義する。
    slot は 0 〜 CONFIG_ZMK_RUNTIME_MACRO_COUNT-1 (現状 0〜7)。
    どのマクロがどのスロットに入っているかは DYA Studio のマクロ一覧で確認する。
@@ -157,7 +163,8 @@
                 <&kp LEFT_ALT>,
                 <&macro_wait_time 20>,
                 <&macro_tap>,
-                <&kp GRAVE>,
+                /* IME 切替キーなので JIS 変換の対象外 (&kp_raw) にする */
+                <&kp_raw GRAVE>,
                 <&macro_release>,
                 <&kp LEFT_ALT>;
 
@@ -353,8 +360,8 @@
         ble_win {
             display-name = "BLE_W";
             bindings = <
-&kp F1  &kp F2        &kp F3        &kp F4        &kp F5                          &BT0         &BT1    &bt BT_SEL 2  &bt BT_SEL 3  &bt BT_SEL 4
-&kp F6  &kp F7        &kp F8        &kp F9        &trans            &out OUT_TOG  &trans       &trans  &trans        &trans        &studio_unlock
+&kp F1  &kp F2        &kp F3        &kp F4        &kp F5                          &BT0         &BT1     &bt BT_SEL 2  &bt BT_SEL 3  &bt BT_SEL 4
+&kp F6  &kp F7        &kp F8        &kp F9        &trans            &out OUT_TOG  &trans       &tog_ls  &trans        &trans        &studio_unlock
 &trans  &kp NUMBER_1  &kp NUMBER_2  &kp NUMBER_3  &trans  &trans    &bootloader   &trans       &trans  &trans        &trans        &bt BT_CLR
 &trans  &trans        &trans        &trans        &trans  &trans    &trans        &bootloader                                      &bt BT_CLR_ALL
             >;
