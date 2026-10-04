@@ -85,7 +85,7 @@
     x-codes = <INPUT_REL_X>;
     y-codes = <INPUT_REL_Y>;
     xy-to-scroll-enabled;
-    active-layers = <0x000000C0>; /* layer6 + layer7 */
+    active-layers = <0x00000040>; /* layer6 (SCRL_W) only — layer7 is Tertiary_W (symbols) */
     scale-multiplier = <1>;
     scale-divisor = <1>;   /* Studio UI の倍率がそのまま実効値 (1.0x基準)。固定減速は listener 側 zip_scroll_scaler */
 };
