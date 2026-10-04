@@ -244,10 +244,10 @@
         win_layer {
             display-name = "WIN";
             bindings = <
-&kp Q             &kp W         &kp E         &kp R        &kp T                                      &kp Y          &kp U  &kp I      &kp O    &kp P
-&kp A             &kp S         &kp D         &kp F        &kp G                       &kp MINUS      &kp H          &kp J  &kp K      &kp L    &lt 4 SEMICOLON
-&mt LEFT_SHIFT Z  &kp X         &kp C         &kp V        &kp B        &kp COLON      &kp SEMICOLON  &kp N          &kp M  &kp COMMA  &kp DOT  &lt 10 SLASH
-&kp RCTRL         &kp LEFT_WIN  &kp LEFT_ALT  &lt 2 GRAVE  &lt 4 SPACE  &lt 6 MINUS    &kp ENTER      &kp BACKSPACE                             &kp RIGHT_SHIFT
+&kp Q             &kp W         &kp E         &kp R        &kp T                                     &kp Y          &kp U  &kp I      &kp O    &kp P
+&kp A             &kp S         &kp D         &kp F        &kp G                       &kp TILDE     &kp H          &kp J  &kp K      &kp L    &kp MINUS
+&mt LEFT_SHIFT Z  &kp X         &kp C         &kp V        &kp B        &kp COLON      &kp EQUAL     &kp N          &kp M  &kp COMMA  &kp DOT  &lt 10 SLASH
+&kp RCTRL         &kp LEFT_WIN  &kp LEFT_ALT  &lt 2 LANG2  &kp SPACE    &lt 7 LANG1    &kp BACKSPACE &lt 9 ENTER                               &kp DELETE
             >;
 
             sensor-bindings = <&rsr_default>, <&inc_dec_kp C_VOL_DN C_VOL_UP>;
@@ -268,10 +268,10 @@
         num_win {
             display-name = "NUM_W";
             bindings = <
-&kp ESCAPE  &kp EXCLAMATION       &kp AT_SIGN            &kp HASH          &kp DOLLAR                                &kp EQUAL      &kp NUMBER_7  &kp NUMBER_8  &kp NUMBER_9  &kp ASTERISK
-&kp TAB     &kp PERCENT           &kp CARET              &kp AMPERSAND     &kp ASTERISK                 &kp PERCENT  &kp NUMBER_0   &kp NUMBER_4  &kp NUMBER_5  &kp NUMBER_6  &kp MINUS
-&kp PIPE    &kp LEFT_PARENTHESIS  &kp RIGHT_PARENTHESIS  &kp LEFT_BRACKET  &kp RIGHT_BRACKET  &trans    &kp PLUS     &kp DOT        &kp NUMBER_1  &kp NUMBER_2  &kp NUMBER_3  &kp SLASH
-&kp LCTRL   &kp LEFT_GUI          &kp LEFT_ALT           &trans            &trans             &trans    &kp ENTER    &kp BACKSPACE                                            &kp RIGHT_SHIFT
+&kp KP_MINUS  &kp NUMBER_7  &kp NUMBER_8  &kp NUMBER_9  &kp KP_PLUS                         &trans  &kp F7  &kp F8  &kp F9  &kp F10
+&kp KP_SLASH  &kp NUMBER_4  &kp NUMBER_5  &kp NUMBER_6  &kp KP_MULTIPLY             &trans  &trans  &kp F4  &kp F5  &kp F6  &kp F11
+&kp NUMBER_0  &kp NUMBER_1  &kp NUMBER_2  &kp NUMBER_3  &kp KP_DOT       &trans     &trans  &trans  &kp F1  &kp F2  &kp F3  &kp F12
+&trans        &trans        &trans        &trans        &trans           &trans     &kp ENTER  &kp BACKSPACE                &kp DELETE
             >;
 
             sensor-bindings = <&rsr_default>;
@@ -325,13 +325,13 @@
             sensor-bindings = <&rsr_default>;
         };
 
-        scroll_mac {
-            display-name = "SCRL_M";
+        tertiary_win {
+            display-name = "Tertiary_W";
             bindings = <
-&kp ESCAPE      &kp LC(LS(TAB))         &kp UP_ARROW    &kp LC(TAB)              &trans                           &trans  &trans    &mkp MB3  &trans    &trans
-&kp HOME        &kp LEFT_ARROW          &kp DOWN_ARROW  &kp RIGHT_ARROW          &kp END            &out OUT_TOG  &trans  &mkp MB1  &trans    &mkp MB2  &trans
-&kp LEFT_SHIFT  &kp LG(LS(LEFT_ARROW))  &trans          &kp LG(LS(RIGHT_ARROW))  &trans   &trans    &trans        &trans  &trans    &trans    &trans    &trans
-&trans          &trans                  &trans          &trans                   &trans   &trans    &trans        &trans                                &trans
+&trans             &trans         &trans         &trans           &trans                                    &trans          &trans                &kp LEFT_BRACKET      &kp RIGHT_BRACKET  &trans
+&kp DOUBLE_QUOTES  &kp DOLLAR     &kp AT_SIGN    &kp EXCLAMATION  &kp CARET                   &out OUT_TOG  &trans          &kp COLON             &kp LEFT_PARENTHESIS  &kp RIGHT_PARENTHESIS  &kp TILDE
+&kp SINGLE_QUOTE   &kp AMPERSAND  &kp PERCENT    &kp HASH         &kp GRAVE         &trans    &trans        &trans          &kp SEMICOLON         &kp LEFT_BRACE        &kp RIGHT_BRACE    &kp BACKSLASH
+&trans             &trans         &trans         &trans           &trans            &trans    &trans        &trans                                                                       &kp PIPE
             >;
 
             sensor-bindings = <&rsr_default>;
@@ -347,13 +347,13 @@
             >;
         };
 
-        function_mac {
-            display-name = "FN_M";
+        arrow_win {
+            display-name = "Arrow_W";
             bindings = <
-&kp A   &trans  &trans  &trans  &trans                    &trans  &trans  &trans  &trans  &trans
-&trans  &trans  &trans  &trans  &trans            &trans  &trans  &trans  &trans  &trans  &trans
-&trans  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans  &trans  &trans
-&trans  &trans  &trans  &trans  &trans  &trans    &trans  &trans                          &trans
+&kp A    &trans          &kp UP_ARROW    &trans           &trans                      &trans    &trans          &kp UP_ARROW    &trans           &trans
+&kp END  &kp LEFT_ARROW  &kp DOWN_ARROW  &kp RIGHT_ARROW  &kp HOME            &trans  &kp HOME  &kp LEFT_ARROW  &kp DOWN_ARROW  &kp RIGHT_ARROW  &kp END
+&trans   &trans          &trans          &trans           &trans    &trans    &trans  &trans    &trans          &trans          &trans           &trans
+&trans   &trans          &trans          &trans           &trans    &trans    &trans  &trans                                                     &trans
             >;
         };
 
@@ -362,8 +362,8 @@
             bindings = <
 &kp F1  &kp F2        &kp F3        &kp F4        &kp F5                          &BT0         &BT1     &bt BT_SEL 2  &bt BT_SEL 3  &bt BT_SEL 4
 &kp F6  &kp F7        &kp F8        &kp F9        &trans            &out OUT_TOG  &trans       &tog_ls  &trans        &trans        &studio_unlock
-&trans  &kp NUMBER_1  &kp NUMBER_2  &kp NUMBER_3  &trans  &trans    &bootloader   &trans       &trans  &trans        &trans        &bt BT_CLR
-&trans  &trans        &trans        &trans        &trans  &trans    &trans        &bootloader                                      &bt BT_CLR_ALL
+&trans  &kp NUMBER_1  &kp NUMBER_2  &kp NUMBER_3  &trans  &trans    &bootloader   &trans       &trans   &trans        &trans        &bt BT_CLR
+&trans  &trans        &trans        &trans        &trans  &trans    &trans        &bootloader                                       &bt BT_CLR_ALL
             >;
         };
 
