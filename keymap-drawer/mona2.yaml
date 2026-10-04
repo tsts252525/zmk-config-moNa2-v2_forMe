@@ -16,19 +16,19 @@ layers:
   - D
   - F
   - G
-  - '-'
+  - '~'
   - H
   - J
   - K
   - L
-  - {t: ;, h: MOUSE_W}
+  - '-'
   - {t: Z, h: LEFT SHIFT}
   - X
   - C
   - V
   - B
   - ':'
-  - ;
+  - '='
   - N
   - M
   - ','
@@ -37,12 +37,12 @@ layers:
   - RCTRL
   - LEFT WIN
   - LEFT ALT
-  - {t: '`', h: NUM_W}
-  - {t: SPACE, h: MOUSE_W}
-  - {t: '-', h: SCRL_W}
-  - ENTER
+  - {t: LANG2, h: NUM_W}
+  - SPACE
+  - {t: LANG1, h: Tertiary_W}
   - BACKSPACE
-  - RIGHT SHIFT
+  - {t: ENTER, h: Arrow_W}
+  - DELETE
   MAC:
   - Q
   - W
@@ -82,53 +82,53 @@ layers:
   - LEFT ALT
   - {t: '`', h: NUM_M}
   - {t: SPACE, h: MOUSE_M}
-  - {t: '-', h: SCRL_M}
+  - {t: '-', h: Tertiary_W}
   - ENTER
   - BACKSPACE
   - RIGHT SHIFT
   NUM_W:
-  - ESCAPE
-  - '!'
-  - '@'
-  - '#'
-  - $
-  - '='
+  - KP MINUS
   - '7'
   - '8'
   - '9'
-  - '*'
-  - TAB
-  - '%'
-  - ^
-  - '&'
-  - '*'
-  - '%'
-  - '0'
+  - KP PLUS
+  - {t: ▽, type: trans}
+  - F7
+  - F8
+  - F9
+  - F10
+  - KP SLASH
   - '4'
   - '5'
   - '6'
-  - '-'
-  - '|'
-  - (
-  - )
-  - '['
-  - ']'
+  - KP MULTIPLY
   - {t: ▽, type: trans}
-  - +
-  - .
+  - {t: ▽, type: trans}
+  - F4
+  - F5
+  - F6
+  - F11
+  - '0'
   - '1'
   - '2'
   - '3'
-  - /
-  - LCTRL
-  - LEFT GUI
-  - LEFT ALT
+  - KP DOT
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - F1
+  - F2
+  - F3
+  - F12
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
   - {type: held}
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
   - ENTER
   - BACKSPACE
-  - RIGHT SHIFT
+  - DELETE
   NUM_M:
   - ESCAPE
   - '!'
@@ -234,7 +234,7 @@ layers:
   - _
   - '!'
   - '&mkp MB1'
-  - SCRL_M
+  - Tertiary_W
   - '&mkp MB2'
   - Ctl+SPACE
   - {t: KP 0, h: LEFT SHIFT}
@@ -277,9 +277,9 @@ layers:
   - OUT TOG
   - {t: ▽, type: trans}
   - '&mkp MB1'
-  - {t: ▽, type: trans}
+  - {type: held}
   - '&mkp MB2'
-  - {t: ▽, type: trans}
+  - {type: held}
   - LEFT SHIFT
   - Gui+Sft+LEFT ARROW
   - {t: ▽, type: trans}
@@ -297,44 +297,44 @@ layers:
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
-  - {type: held}
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
-  SCRL_M:
-  - ESCAPE
-  - Ctl+Sft+TAB
-  - UP ARROW
-  - Ctl+TAB
+  - {t: ▽, type: trans}
+  Tertiary_W:
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
-  - '&mkp MB3'
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
-  - HOME
-  - LEFT ARROW
-  - DOWN ARROW
-  - RIGHT ARROW
-  - END
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - '['
+  - ']'
+  - {t: ▽, type: trans}
+  - '"'
+  - $
+  - '@'
+  - '!'
+  - ^
   - OUT TOG
   - {t: ▽, type: trans}
-  - '&mkp MB1'
-  - {t: ▽, type: trans}
-  - '&mkp MB2'
-  - {t: ▽, type: trans}
-  - LEFT SHIFT
-  - Gui+Sft+LEFT ARROW
-  - {t: ▽, type: trans}
-  - Gui+Sft+RIGHT ARROW
-  - {t: ▽, type: trans}
-  - {t: ▽, type: trans}
-  - {t: ▽, type: trans}
+  - ':'
+  - (
+  - )
+  - '~'
+  - ''''
+  - '&'
+  - '%'
+  - '#'
+  - '`'
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
-  - {t: ▽, type: trans}
-  - {t: ▽, type: trans}
+  - ;
+  - '{'
+  - '}'
+  - \
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
@@ -343,7 +343,7 @@ layers:
   - {type: held}
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
-  - {t: ▽, type: trans}
+  - '|'
   FN_W:
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
@@ -387,9 +387,28 @@ layers:
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
-  FN_M:
+  Arrow_W:
   - A
   - {t: ▽, type: trans}
+  - UP ARROW
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - UP ARROW
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - END
+  - LEFT ARROW
+  - DOWN ARROW
+  - RIGHT ARROW
+  - HOME
+  - {t: ▽, type: trans}
+  - HOME
+  - LEFT ARROW
+  - DOWN ARROW
+  - RIGHT ARROW
+  - END
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
@@ -409,26 +428,7 @@ layers:
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
-  - {t: ▽, type: trans}
-  - {t: ▽, type: trans}
-  - {t: ▽, type: trans}
-  - {t: ▽, type: trans}
-  - {t: ▽, type: trans}
-  - {t: ▽, type: trans}
-  - {t: ▽, type: trans}
-  - {t: ▽, type: trans}
-  - {t: ▽, type: trans}
-  - {t: ▽, type: trans}
-  - {t: ▽, type: trans}
-  - {t: ▽, type: trans}
-  - {t: ▽, type: trans}
-  - {t: ▽, type: trans}
-  - {t: ▽, type: trans}
-  - {t: ▽, type: trans}
-  - {t: ▽, type: trans}
-  - {t: ▽, type: trans}
-  - {t: ▽, type: trans}
-  - {t: ▽, type: trans}
+  - {type: held}
   - {t: ▽, type: trans}
   BLE_W:
   - F1
@@ -448,7 +448,7 @@ layers:
   - {t: ▽, type: trans}
   - OUT TOG
   - {t: ▽, type: trans}
-  - {t: ▽, type: trans}
+  - '&tog_ls'
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
   - '&studio_unlock'
