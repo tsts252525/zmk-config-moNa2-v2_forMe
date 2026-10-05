@@ -119,11 +119,27 @@
 
 };
 
+/* ─────────────────────────────────────────────────────────────
+   オートマウスレイヤー (zip_temp_layer / ZMK コア input processor)
+   ボール操作で MOUSE_W (layer 4) を自動 ON。10000ms 無操作で OFF。
+   excluded-positions のキー (マウスボタン等) 以外を押すと即デフォルトに戻る。
+   ※ビルド時 devicetree 設定。DYA Studio では変更不可。
+   ────────────────────────────────────────────────────── */
+&zip_temp_layer {
+    /* 押しても解除しないキー位置 = MOUSE_W のマウス系キー:
+       7=mo(scroll), 17=MB1, 18=MB3, 19=MB2, 29=MB4, 31=MB5 */
+    excluded-positions = <7 17 18 19 29 31>;
+    /* 直前にタイピングしていたら誤発動させない */
+    require-prior-idle-ms = <300>;
+};
+
 &trackball_central_listener {
     status = "okay";
     device = <&trackball_central>;
-    /* Keep scroll independent of pointer scaling. Emit one step per 60
+    /* zip_temp_layer を先頭に: ボール入力で MOUSE_W(4) を自動起動 (10000ms)。
+     * その後 既存の gesture/scroll/scaler チェーンを通す。
+     * Keep scroll independent of pointer scaling. Emit one step per 60
      * counts: gentler than 1/40, while retaining a lower onset threshold
      * than the original 1/100. Fractional counts are accumulated. */
-    input-processors = <&mg &scroll_runtime_input_processor &mouse_runtime_input_processor &zip_scroll_scaler 1 60 &inertial_scroll>;
+    input-processors = <&zip_temp_layer 4 10000 &mg &scroll_runtime_input_processor &mouse_runtime_input_processor &zip_scroll_scaler 1 60 &inertial_scroll>;
 };
