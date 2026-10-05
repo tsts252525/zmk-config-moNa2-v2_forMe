@@ -245,8 +245,8 @@
             display-name = "WIN";
             bindings = <
                 &kp Q    &kp W    &kp E    &kp R    &kp T    &kp Y    &kp U    &kp I    &kp O    &kp P    &kp A    &kp S
-                &kp D    &kp F    &kp G    &runtime_macro 0    &kp H    &kp J    &kp K    &kp L    &kp MINUS    &mt LEFT_SHIFT Z    &kp X    &kp C
-                &kp V    &kp B    &kp EQUAL    &runtime_macro 1    &kp N    &kp M    &kp COMMA    &kp PERIOD    &lt 10 SLASH    &kp RIGHT_CONTROL    &kp LEFT_GUI    &kp LEFT_ALT
+                &kp D    &kp F    &kp G    &rmacro 0    &kp H    &kp J    &kp K    &kp L    &kp MINUS    &mt LEFT_SHIFT Z    &kp X    &kp C
+                &kp V    &kp B    &kp EQUAL    &rmacro 1    &kp N    &kp M    &kp COMMA    &kp PERIOD    &lt 10 SLASH    &kp RIGHT_CONTROL    &kp LEFT_GUI    &kp LEFT_ALT
                 &lt 2 LANG2    &kp SPACE    &lt 7 LANG1    &kp BACKSPACE    &lt 9 RETURN    &kp DELETE
             >;
             sensor-bindings = <&rsr_default>, <&inc_dec_kp C_VOL_DN C_VOL_UP>;
