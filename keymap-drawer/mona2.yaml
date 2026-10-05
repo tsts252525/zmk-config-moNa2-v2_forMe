@@ -16,7 +16,7 @@ layers:
   - D
   - F
   - G
-  - '&runtime_macro'
+  - '&rmacro'
   - H
   - J
   - K
@@ -28,7 +28,7 @@ layers:
   - V
   - B
   - '='
-  - '&runtime_macro 1'
+  - '&rmacro 1'
   - N
   - M
   - ','
