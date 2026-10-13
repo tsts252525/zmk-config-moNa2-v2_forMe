@@ -9,7 +9,7 @@ layers:
   - Y
   - U
   - I
-  - O
+  - {t: O, h: '&mg_set_0'}
   - P
   - A
   - S
@@ -21,7 +21,7 @@ layers:
   - J
   - K
   - L
-  - '-'
+  - {t: '-', h: '&mg_set_1'}
   - {t: Z, h: LEFT SHIFT}
   - X
   - C
