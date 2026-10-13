@@ -191,6 +191,27 @@
             tapping-term-ms = <200>;
         };
 
+        /* タップ=通常キー / ホールド=マウスジェスチャー起動 (mg_set_N)。
+         * 使い方: &mg_ht0 0 <keycode>  (第1引数0はダミー: mg_set_0 は 0-cell)
+         * mg_ht0 → ジェスチャーセット0 / mg_ht1 → ジェスチャーセット1 */
+        mg_ht0: mg_holdtap_0 {
+            compatible = "zmk,behavior-hold-tap";
+            #binding-cells = <2>;
+            bindings = <&mg_set_0>, <&kp>;
+            tapping-term-ms = <200>;
+            flavor = "tap-preferred";
+            display-name = "MGesture0/Tap";
+        };
+
+        mg_ht1: mg_holdtap_1 {
+            compatible = "zmk,behavior-hold-tap";
+            #binding-cells = <2>;
+            bindings = <&mg_set_1>, <&kp>;
+            tapping-term-ms = <200>;
+            flavor = "tap-preferred";
+            display-name = "MGesture1/Tap";
+        };
+
         // エンコーダ用 runtime-configurable sensor rotate
         // デフォルトはスクロール (cw=SCRL_DOWN, ccw=SCRL_UP)
         // DYA Studio Web UI から レイヤーごとに cw/ccw の binding を
@@ -244,8 +265,8 @@
         win_layer {
             display-name = "WIN";
             bindings = <
-                &kp Q    &kp W    &kp E    &kp R    &kp T    &kp Y    &kp U    &kp I    &kp O    &kp P    &kp A    &kp S
-                &kp D    &kp F    &kp G    &rmacro 0    &kp H    &kp J    &kp K    &kp L    &kp MINUS    &mt LEFT_SHIFT Z    &kp X    &kp C
+                &kp Q    &kp W    &kp E    &kp R    &kp T    &kp Y    &kp U    &kp I    &mg_ht0 0 O    &kp P    &kp A    &kp S
+                &kp D    &kp F    &kp G    &rmacro 0    &kp H    &kp J    &kp K    &kp L    &mg_ht1 0 MINUS    &mt LEFT_SHIFT Z    &kp X    &kp C
                 &kp V    &kp B    &kp EQUAL    &rmacro 1    &kp N    &kp M    &kp COMMA    &kp PERIOD    &lt 10 SLASH    &kp RIGHT_CONTROL    &kp LEFT_GUI    &kp LEFT_ALT
                 &lt 2 LANG2    &kp SPACE    &lt 7 LANG1    &kp BACKSPACE    &lt 9 RETURN    &kp DELETE
             >;
