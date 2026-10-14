@@ -74,6 +74,11 @@
         y-input-code = <INPUT_REL_Y>;
         /* DYA Studio 上でこのセンサーを識別するための短い ID */
         settings-id = "tball";
+        /* レストモードへの自動ダウンシフトを抑止し run モード固定にする。
+           無操作後の「動き出しの遅延」(Rest1-3 復帰レイテンシ) を解消。
+           トレードオフ: アイドル時消費電流↑。runtime 値は
+           CONFIG_ZMK_PMW3610_CUSTOM_SETTINGS 経由で DYA Studio から変更可。 */
+        force-awake;
 #endif
     };
 };
