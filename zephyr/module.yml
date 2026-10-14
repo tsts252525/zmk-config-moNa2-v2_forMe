@@ -1,3 +1,7 @@
 build:
+  # In-repo module: US keycap -> JIS OS layout conversion (&kp override + &tog_ls)
+  cmake: modules/jis_layout_shift
+  kconfig: modules/jis_layout_shift/Kconfig
   settings:
     board_root: .
+    dts_root: modules/jis_layout_shift

@@ -1,0 +1,65 @@
+/*
+ * JIS layout shift
+ *
+ * Include this AFTER <behaviors.dtsi> in the keymap.
+ *
+ * DYA Studio / ZMK Studio compatibility notes:
+ *  - &kp keeps its node name `key_press` and its display-name "Key Press".
+ *    Studio identifies behaviors by a CRC16 of the device name, and the
+ *    runtime-macro / runtime-combo modules look &kp up as "key_press", so
+ *    keymaps, macros and combos saved from Studio keep working unchanged.
+ *    Do NOT add a `label` property here: it would rename the device.
+ *  - Only the compatible of &kp is swapped to the layout-aware driver.
+ */
+
+#include <dt-bindings/zmk/keys.h>
+
+/ {
+    behaviors {
+        /*
+         * Plain key press without JIS conversion. ZMK core (sticky key)
+         * requires a node with the original "zmk,behavior-key-press"
+         * compatible, and it is also handy for keys that must never be
+         * converted (e.g. the IME toggle macro).
+         */
+        kp_raw: key_press_raw {
+            compatible = "zmk,behavior-key-press";
+            #binding-cells = <1>;
+            display-name = "Key Press (No JIS)";
+        };
+
+        tog_ls: jis_toggle {
+            compatible = "zmk,behavior-jis-layout-toggle";
+            #binding-cells = <0>;
+            mode = "toggle";
+            display-name = "JIS/US Toggle";
+        };
+
+        tog_ls_on: jis_on {
+            compatible = "zmk,behavior-jis-layout-toggle";
+            #binding-cells = <0>;
+            mode = "on";
+            display-name = "JIS Mode On";
+        };
+
+        tog_ls_off: jis_off {
+            compatible = "zmk,behavior-jis-layout-toggle";
+            #binding-cells = <0>;
+            mode = "off";
+            display-name = "JIS Mode Off";
+        };
+    };
+};
+
+&kp {
+    compatible = "zmk,behavior-jis-key-press";
+};
+
+/*
+ * Sticky key compares its binding against the device of the original
+ * "zmk,behavior-key-press" compatible, so point it at &kp_raw to keep
+ * stock sticky-key behavior.
+ */
+&sk {
+    bindings = <&kp_raw>;
+};

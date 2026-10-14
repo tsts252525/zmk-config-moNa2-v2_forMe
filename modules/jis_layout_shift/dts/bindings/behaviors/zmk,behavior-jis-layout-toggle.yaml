@@ -1,0 +1,14 @@
+description: Switches US -> JIS keycode conversion on/off
+
+compatible: "zmk,behavior-jis-layout-toggle"
+
+include: zero_param.yaml
+
+properties:
+  mode:
+    type: string
+    default: "toggle"
+    enum:
+      - "toggle"
+      - "on"
+      - "off"
