@@ -8,9 +8,9 @@ layers:
   - T
   - Y
   - U
-  - I
-  - {t: O, h: '&gt_tab_hold'}
-  - P
+  - {t: I, h: SCRL_W}
+  - {t: O, h: G_TAB}
+  - {t: P, h: SCRL_W}
   - A
   - S
   - D
@@ -21,7 +21,7 @@ layers:
   - J
   - K
   - L
-  - {t: '-', h: '&gt_edit_hold'}
+  - {t: '-', h: G_EDIT}
   - {t: Z, h: LEFT SHIFT}
   - X
   - C
@@ -279,7 +279,7 @@ layers:
   - '&mkp MB1'
   - {t: ▽, type: trans}
   - '&mkp MB2'
-  - {type: held}
+  - {t: ▽, type: trans}
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
@@ -525,7 +525,7 @@ layers:
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
-  - {t: ▽, type: trans}
+  - {type: held}
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
@@ -580,7 +580,7 @@ layers:
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
-  - {t: ▽, type: trans}
+  - {type: held}
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
