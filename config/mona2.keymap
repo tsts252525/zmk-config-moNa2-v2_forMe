@@ -100,6 +100,14 @@
             key-positions = <11 12>;
             bindings = <&kp TAB>;
         };
+
+        /* I+O (位置7+8) → ボールジェスチャー ウィンドウ切替 */
+        gesture_switch_combo {
+            slot = <2>;
+            display-name = "GestureSwitch";
+            key-positions = <7 8>;
+            bindings = <&gesture_switch>;
+        };
     };
 
     /* 静的マクロ。キーマップ上で &BT0 / &screenshot などの名前で直接
@@ -107,6 +115,17 @@
        DYA Studio から編集したいマクロは Web UI で新規作成し、
        キーに `&rmacro <slot>` を割り当てて使う。 */
     macros {
+        /* I+O コンボで発動: 押している間 gesture_switch 層(14)+抑制、
+         * 離したら alt_tab_end で Alt+Tab 選択を確定する。 */
+        gesture_switch: gesture_switch {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = <&macro_press &mo 14 &mg_mom>
+                     , <&macro_pause_for_release>
+                     , <&macro_release &mo 14 &mg_mom>
+                     , <&macro_tap &alt_tab_end>;
+        };
+
         to_layer_0: to_layer_0 {
             compatible = "zmk,behavior-macro-one-param";
             #binding-cells = <1>;
@@ -191,25 +210,67 @@
             tapping-term-ms = <200>;
         };
 
-        /* タップ=通常キー / ホールド=マウスジェスチャー起動 (mg_set_N)。
-         * 使い方: &mg_ht0 0 <keycode>  (第1引数0はダミー: mg_set_0 は 0-cell)
-         * mg_ht0 → ジェスチャーセット0 / mg_ht1 → ジェスチャーセット1 */
-        mg_ht0: mg_holdtap_0 {
-            compatible = "zmk,behavior-hold-tap";
-            #binding-cells = <2>;
-            bindings = <&mg_set_0>, <&kp>;
-            tapping-term-ms = <200>;
-            flavor = "tap-preferred";
-            display-name = "MGesture0/Tap";
+        /* ── torabo-tsuki 流 ボールジェスチャー (Path B 移植) ──────────
+         * O 長押し  → gesture_tab 層(12)   / − 長押し → gesture_edit 層(13)
+         * I+O コンボ → gesture_switch 層(14)
+         * 長押し/コンボ中だけ momentary mouse_gesture でカーソルを抑制する。
+         * ジェスチャー本体 (4方向→動作) は mg_tab/mg_edit/mg_switch として
+         * boards/shields/mona2/mona2_r.overlay に定義し、listener の
+         * layer override でその層にいる間だけ有効化する。 */
+
+        /* カーソル抑制用: 押している間だけ mouse_gesture を有効化する
+         * (このフォークのカーソル抑制は mouse_gesture 連動のグローバル方式)。*/
+        mg_mom: mg_momentary {
+            compatible = "zmk,behavior-mouse-gesture";
+            #binding-cells = <0>;
+            toggle-mode = "momentary";
         };
 
-        mg_ht1: mg_holdtap_1 {
+        /* Alt+Tab ウィンドウ切替 (modules/jis_layout_shift/src/behavior_alt_tab.c)。
+         * 初回は LALT を押し続けて param1 をタップ、以降は param2 をタップ。
+         * alt_tab_end で LALT を離して確定。central 限定ビルド。 */
+        alt_tab: alt_tab {
+            compatible = "zmk,behavior-alt-tab";
+            #binding-cells = <2>;
+        };
+        alt_tab_end: alt_tab_end {
+            compatible = "zmk,behavior-alt-tab-end";
+            #binding-cells = <0>;
+        };
+
+        /* ホールド中: ジェスチャー層 + mouse_gesture(抑制) を同時に保持。*/
+        gt_tab_hold: gt_tab_hold {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = <&macro_press &mo 12 &mg_mom>
+                     , <&macro_pause_for_release>
+                     , <&macro_release &mo 12 &mg_mom>;
+        };
+        gt_edit_hold: gt_edit_hold {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = <&macro_press &mo 13 &mg_mom>
+                     , <&macro_pause_for_release>
+                     , <&macro_release &mo 13 &mg_mom>;
+        };
+
+        /* タップ=通常キー / ホールド=上のマクロ (ジェスチャー層+抑制)。
+         * 使い方: &gt_tab 0 <keycode> (第1引数0はダミー: マクロは 0-cell)。*/
+        gt_tab: gt_tab {
             compatible = "zmk,behavior-hold-tap";
             #binding-cells = <2>;
-            bindings = <&mg_set_1>, <&kp>;
-            tapping-term-ms = <200>;
             flavor = "tap-preferred";
-            display-name = "MGesture1/Tap";
+            tapping-term-ms = <200>;
+            bindings = <&gt_tab_hold>, <&kp>;
+            display-name = "GTab/Tap";
+        };
+        gt_edit: gt_edit {
+            compatible = "zmk,behavior-hold-tap";
+            #binding-cells = <2>;
+            flavor = "tap-preferred";
+            tapping-term-ms = <200>;
+            bindings = <&gt_edit_hold>, <&kp>;
+            display-name = "GEdit/Tap";
         };
 
         // エンコーダ用 runtime-configurable sensor rotate
@@ -265,8 +326,8 @@
         win_layer {
             display-name = "WIN";
             bindings = <
-                &kp Q    &kp W    &kp E    &kp R    &kp T    &kp Y    &kp U    &kp I    &mg_ht0 0 O    &kp P    &kp A    &kp S
-                &kp D    &kp F    &kp G    &rmacro 0    &kp H    &kp J    &kp K    &kp L    &mg_ht1 0 MINUS    &mt LEFT_SHIFT Z    &kp X    &kp C
+                &kp Q    &kp W    &kp E    &kp R    &kp T    &kp Y    &kp U    &kp I    &gt_tab 0 O    &kp P    &kp A    &kp S
+                &kp D    &kp F    &kp G    &rmacro 0    &kp H    &kp J    &kp K    &kp L    &gt_edit 0 MINUS    &mt LEFT_SHIFT Z    &kp X    &kp C
                 &kp V    &kp B    &kp EQUAL    &rmacro 1    &kp N    &kp M    &kp COMMA    &kp PERIOD    &lt 10 SLASH    &kp RIGHT_CONTROL    &kp LEFT_GUI    &kp LEFT_ALT
                 &lt 2 LANG2    &kp SPACE    &lt 7 LANG1    &kp BACKSPACE    &lt 9 RETURN    &kp DELETE
             >;
@@ -390,6 +451,43 @@
                 &kp F8    &kp F9    &trans    &out OUT_TOG    &trans    &trans    &trans    &trans    &studio_unlock    &trans    &kp N1    &kp N2
                 &kp N3    &trans    &trans    &bootloader    &trans    &trans    &trans    &trans    &bt BT_CLR    &trans    &trans    &trans
                 &trans    &trans    &trans    &trans    &bootloader    &bt BT_CLR_ALL
+            >;
+            sensor-bindings = <&rsr_default>;
+        };
+
+        /* ── ボールジェスチャー層 (torabo 移植, index 12/13/14) ──────
+         * すべて &trans: このキーの長押し/コンボで入り、ボールを転がして
+         * ジェスチャーを出すだけの層。実際の 4方向→動作は overlay 側の
+         * mg_tab/mg_edit/mg_switch と listener override が担う。 */
+        gesture_tab_layer {
+            display-name = "G_TAB";
+            bindings = <
+                &trans    &trans    &trans    &trans    &trans    &trans    &trans    &trans    &trans    &trans    &trans    &trans
+                &trans    &trans    &trans    &trans    &trans    &trans    &trans    &trans    &trans    &trans    &trans    &trans
+                &trans    &trans    &trans    &trans    &trans    &trans    &trans    &trans    &trans    &trans    &trans    &trans
+                &trans    &trans    &trans    &trans    &trans    &trans
+            >;
+            sensor-bindings = <&rsr_default>;
+        };
+
+        gesture_edit_layer {
+            display-name = "G_EDIT";
+            bindings = <
+                &trans    &trans    &trans    &trans    &trans    &trans    &trans    &trans    &trans    &trans    &trans    &trans
+                &trans    &trans    &trans    &trans    &trans    &trans    &trans    &trans    &trans    &trans    &trans    &trans
+                &trans    &trans    &trans    &trans    &trans    &trans    &trans    &trans    &trans    &trans    &trans    &trans
+                &trans    &trans    &trans    &trans    &trans    &trans
+            >;
+            sensor-bindings = <&rsr_default>;
+        };
+
+        gesture_switch_layer {
+            display-name = "G_SWITCH";
+            bindings = <
+                &trans    &trans    &trans    &trans    &trans    &trans    &trans    &trans    &trans    &trans    &trans    &trans
+                &trans    &trans    &trans    &trans    &trans    &trans    &trans    &trans    &trans    &trans    &trans    &trans
+                &trans    &trans    &trans    &trans    &trans    &trans    &trans    &trans    &trans    &trans    &trans    &trans
+                &trans    &trans    &trans    &trans    &trans    &trans
             >;
             sensor-bindings = <&rsr_default>;
         };

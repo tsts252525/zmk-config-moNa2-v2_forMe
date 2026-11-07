@@ -122,6 +122,52 @@
         #input-processor-cells = <0>;
     };
 
+    /* ─────────────────────────────────────────────────────────
+       ボールジェスチャー本体 (torabo-tsuki 移植)。
+       gesture_tab/edit/switch 層 (12/13/14) にいる間だけ、下の listener
+       override で該当プロセッサがボール入力を受ける。有効化とカーソル抑制は
+       keymap 側の momentary mouse_gesture (&mg_mom) が行う (このフォークの
+       抑制は mouse_gesture 連動のため always-active にはしない)。
+       ───────────────────────────────────────────────────── */
+    mg_tab: mg_tab {
+        compatible = "zmk,input-processor-mouse-gesture";
+        #input-processor-cells = <0>;
+        enable-eager-mode;
+        stroke-size = <200>;
+        gesture-cooldown-ms = <500>;
+
+        new_tab   { pattern = <GESTURE_UP>;    bindings = <&kp LC(T)>; };
+        close_tab { pattern = <GESTURE_DOWN>;  bindings = <&kp LC(W)>; };
+        next_tab  { pattern = <GESTURE_RIGHT>; bindings = <&kp LC(TAB)>; };
+        prev_tab  { pattern = <GESTURE_LEFT>;  bindings = <&kp LC(LS(TAB))>; };
+    };
+
+    mg_edit: mg_edit {
+        compatible = "zmk,input-processor-mouse-gesture";
+        #input-processor-cells = <0>;
+        enable-eager-mode;
+        stroke-size = <200>;
+        gesture-cooldown-ms = <500>;
+
+        copy    { pattern = <GESTURE_UP>;    bindings = <&kp LC(C)>; };
+        paste   { pattern = <GESTURE_DOWN>;  bindings = <&kp LC(V)>; };
+        forward { pattern = <GESTURE_RIGHT>; bindings = <&kp LA(RIGHT)>; };
+        back    { pattern = <GESTURE_LEFT>;  bindings = <&kp LA(LEFT)>; };
+    };
+
+    mg_switch: mg_switch {
+        compatible = "zmk,input-processor-mouse-gesture";
+        #input-processor-cells = <0>;
+        enable-eager-mode;
+        stroke-size = <200>;
+        gesture-cooldown-ms = <300>;
+
+        undo        { pattern = <GESTURE_UP>;    bindings = <&kp LC(Z)>; };
+        redo        { pattern = <GESTURE_DOWN>;  bindings = <&kp LC(Y)>; };
+        next_window { pattern = <GESTURE_RIGHT>; bindings = <&alt_tab TAB RIGHT>; };
+        prev_window { pattern = <GESTURE_LEFT>;  bindings = <&alt_tab LS(TAB) LEFT>; };
+    };
+
 };
 
 /* ─────────────────────────────────────────────────────────────
@@ -147,4 +193,19 @@
      * counts: gentler than 1/40, while retaining a lower onset threshold
      * than the original 1/100. Fractional counts are accumulated. */
     input-processors = <&zip_temp_layer 4 10000 &mg &scroll_runtime_input_processor &mouse_runtime_input_processor &zip_scroll_scaler 1 60 &inertial_scroll>;
+
+    /* ジェスチャー層にいる間だけ、ボール入力をそのセット専用プロセッサへ回す。
+     * O 長押し=12 / − 長押し=13 / I+O コンボ=14 (keymap 側で層遷移)。 */
+    gesture_tab_lo {
+        layers = <12>;
+        input-processors = <&mg_tab>;
+    };
+    gesture_edit_lo {
+        layers = <13>;
+        input-processors = <&mg_edit>;
+    };
+    gesture_switch_lo {
+        layers = <14>;
+        input-processors = <&mg_switch>;
+    };
 };
