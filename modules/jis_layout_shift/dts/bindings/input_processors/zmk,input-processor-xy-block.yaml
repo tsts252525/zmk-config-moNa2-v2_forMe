@@ -5,8 +5,4 @@ description: |
 
 compatible: "zmk,input-processor-xy-block"
 
-properties:
-  "#input-processor-cells":
-    type: int
-    const: 0
-    description: "Number of cells in the input processor specifier"
+include: ip_zero_param.yaml
