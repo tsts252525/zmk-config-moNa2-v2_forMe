@@ -125,13 +125,21 @@
     /* ─────────────────────────────────────────────────────────
        ボールジェスチャー本体 (torabo-tsuki 移植)。
        gesture_tab/edit/switch 層 (12/13/14) にいる間だけ、下の listener
-       override で該当プロセッサがボール入力を受ける。有効化とカーソル抑制は
-       keymap 側の momentary mouse_gesture (&mg_mom) が行う (このフォークの
-       抑制は mouse_gesture 連動のため always-active にはしない)。
+       override で該当プロセッサがボール入力を受ける。各プロセッサは
+       always-active なので層にいれば即認識し、直後の &xy_block が REL_X/Y を
+       落とすのでジェスチャー中はカーソルが動かない (mouse_gesture 連動には頼らない)。
        ───────────────────────────────────────────────────── */
+    /* カーソル抑制用: ジェスチャー/スクロール層で REL_X/REL_Y を落として
+       カーソルを動かさない (modules/jis_layout_shift/src/input_processor_xy_block.c)。*/
+    xy_block: xy_block {
+        compatible = "zmk,input-processor-xy-block";
+        #input-processor-cells = <0>;
+    };
+
     mg_tab: mg_tab {
         compatible = "zmk,input-processor-mouse-gesture";
         #input-processor-cells = <0>;
+        always-active;
         enable-eager-mode;
         stroke-size = <200>;
         gesture-cooldown-ms = <500>;
@@ -145,6 +153,7 @@
     mg_edit: mg_edit {
         compatible = "zmk,input-processor-mouse-gesture";
         #input-processor-cells = <0>;
+        always-active;
         enable-eager-mode;
         stroke-size = <200>;
         gesture-cooldown-ms = <500>;
@@ -158,6 +167,7 @@
     mg_switch: mg_switch {
         compatible = "zmk,input-processor-mouse-gesture";
         #input-processor-cells = <0>;
+        always-active;
         enable-eager-mode;
         stroke-size = <200>;
         gesture-cooldown-ms = <300>;
@@ -198,14 +208,14 @@
      * O 長押し=12 / − 長押し=13 / I+O コンボ=14 (keymap 側で層遷移)。 */
     gesture_tab_lo {
         layers = <12>;
-        input-processors = <&mg_tab>;
+        input-processors = <&mg_tab &xy_block>;
     };
     gesture_edit_lo {
         layers = <13>;
-        input-processors = <&mg_edit>;
+        input-processors = <&mg_edit &xy_block>;
     };
     gesture_switch_lo {
         layers = <14>;
-        input-processors = <&mg_switch>;
+        input-processors = <&mg_switch &xy_block>;
     };
 };

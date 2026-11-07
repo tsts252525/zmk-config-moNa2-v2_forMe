@@ -1,0 +1,12 @@
+description: |
+  Input processor that drops pointer REL_X / REL_Y events (keeps the cursor
+  still). Scroll (WHEEL/HWHEEL) and buttons pass through. See
+  src/input_processor_xy_block.c.
+
+compatible: "zmk,input-processor-xy-block"
+
+properties:
+  "#input-processor-cells":
+    type: int
+    const: 0
+    description: "Number of cells in the input processor specifier"
