@@ -1,0 +1,8 @@
+description: |
+  Layout-aware key press. Behaves exactly like &kp while JIS mode is off;
+  while it is on, converts US-layout symbol keycodes to the keycodes that
+  produce the same symbols on a JIS-layout OS.
+
+compatible: "zmk,behavior-jis-key-press"
+
+include: one_param.yaml

@@ -1,0 +1,8 @@
+description: |
+  Input processor that drops pointer REL_X / REL_Y events (keeps the cursor
+  still). Scroll (WHEEL/HWHEEL) and buttons pass through. See
+  src/input_processor_xy_block.c.
+
+compatible: "zmk,input-processor-xy-block"
+
+include: ip_zero_param.yaml

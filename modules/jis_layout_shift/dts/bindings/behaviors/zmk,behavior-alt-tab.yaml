@@ -1,0 +1,8 @@
+description: |
+  Holds Left Alt (once) and taps the first parameter to open the Alt+Tab
+  switcher; while Alt is held, taps the second parameter instead.
+  See src/behavior_alt_tab.c.
+
+compatible: "zmk,behavior-alt-tab"
+
+include: two_param.yaml

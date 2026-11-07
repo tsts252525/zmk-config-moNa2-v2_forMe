@@ -1,0 +1,5 @@
+description: Releases Left Alt held by zmk,behavior-alt-tab. See src/behavior_alt_tab.c.
+
+compatible: "zmk,behavior-alt-tab-end"
+
+include: zero_param.yaml

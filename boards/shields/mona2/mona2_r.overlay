@@ -74,6 +74,11 @@
         y-input-code = <INPUT_REL_Y>;
         /* DYA Studio 上でこのセンサーを識別するための短い ID */
         settings-id = "tball";
+        /* レストモードへの自動ダウンシフトを抑止し run モード固定にする。
+           無操作後の「動き出しの遅延」(Rest1-3 復帰レイテンシ) を解消。
+           トレードオフ: アイドル時消費電流↑。runtime 値は
+           CONFIG_ZMK_PMW3610_CUSTOM_SETTINGS 経由で DYA Studio から変更可。 */
+        force-awake;
 #endif
     };
 };
@@ -85,7 +90,7 @@
     x-codes = <INPUT_REL_X>;
     y-codes = <INPUT_REL_Y>;
     xy-to-scroll-enabled;
-    active-layers = <0x000000C0>; /* layer6 + layer7 */
+    active-layers = <0x00000040>; /* layer6 (SCRL_W) only — layer7 is Tertiary_W (symbols) */
     scale-multiplier = <1>;
     scale-divisor = <1>;   /* Studio UI の倍率がそのまま実効値 (1.0x基準)。固定減速は listener 側 zip_scroll_scaler */
 };
@@ -117,13 +122,100 @@
         #input-processor-cells = <0>;
     };
 
+    /* ─────────────────────────────────────────────────────────
+       ボールジェスチャー本体 (torabo-tsuki 移植)。
+       gesture_tab/edit/switch 層 (12/13/14) にいる間だけ、下の listener
+       override で該当プロセッサがボール入力を受ける。各プロセッサは
+       always-active なので層にいれば即認識し、直後の &xy_block が REL_X/Y を
+       落とすのでジェスチャー中はカーソルが動かない (mouse_gesture 連動には頼らない)。
+       ───────────────────────────────────────────────────── */
+    /* カーソル抑制用: ジェスチャー/スクロール層で REL_X/REL_Y を落として
+       カーソルを動かさない (modules/jis_layout_shift/src/input_processor_xy_block.c)。*/
+    xy_block: xy_block {
+        compatible = "zmk,input-processor-xy-block";
+        #input-processor-cells = <0>;
+    };
+
+    mg_tab: mg_tab {
+        compatible = "zmk,input-processor-mouse-gesture";
+        #input-processor-cells = <0>;
+        always-active;
+        enable-eager-mode;
+        stroke-size = <200>;
+        gesture-cooldown-ms = <500>;
+
+        new_tab   { pattern = <GESTURE_UP>;    bindings = <&kp LC(T)>; };
+        close_tab { pattern = <GESTURE_DOWN>;  bindings = <&kp LC(W)>; };
+        next_tab  { pattern = <GESTURE_RIGHT>; bindings = <&kp LC(TAB)>; };
+        prev_tab  { pattern = <GESTURE_LEFT>;  bindings = <&kp LC(LS(TAB))>; };
+    };
+
+    mg_edit: mg_edit {
+        compatible = "zmk,input-processor-mouse-gesture";
+        #input-processor-cells = <0>;
+        always-active;
+        enable-eager-mode;
+        stroke-size = <200>;
+        gesture-cooldown-ms = <500>;
+
+        copy    { pattern = <GESTURE_UP>;    bindings = <&kp LC(C)>; };
+        paste   { pattern = <GESTURE_DOWN>;  bindings = <&kp LC(V)>; };
+        forward { pattern = <GESTURE_RIGHT>; bindings = <&kp LA(RIGHT)>; };
+        back    { pattern = <GESTURE_LEFT>;  bindings = <&kp LA(LEFT)>; };
+    };
+
+    mg_switch: mg_switch {
+        compatible = "zmk,input-processor-mouse-gesture";
+        #input-processor-cells = <0>;
+        always-active;
+        enable-eager-mode;
+        stroke-size = <200>;
+        gesture-cooldown-ms = <300>;
+
+        undo        { pattern = <GESTURE_UP>;    bindings = <&kp LC(Z)>; };
+        redo        { pattern = <GESTURE_DOWN>;  bindings = <&kp LC(Y)>; };
+        next_window { pattern = <GESTURE_RIGHT>; bindings = <&alt_tab TAB RIGHT>; };
+        prev_window { pattern = <GESTURE_LEFT>;  bindings = <&alt_tab LS(TAB) LEFT>; };
+    };
+
+};
+
+/* ─────────────────────────────────────────────────────────────
+   オートマウスレイヤー (zip_temp_layer / ZMK コア input processor)
+   ボール操作で MOUSE_W (layer 4) を自動 ON。10000ms 無操作で OFF。
+   excluded-positions のキー (マウスボタン等) 以外を押すと即デフォルトに戻る。
+   ※ビルド時 devicetree 設定。DYA Studio では変更不可。
+   ────────────────────────────────────────────────────── */
+&zip_temp_layer {
+    /* 押しても解除しないキー位置 = MOUSE_W のマウス系キー:
+       7=mo(scroll), 17=MB1, 18=MB3, 19=MB2, 29=MB4, 31=MB5 */
+    excluded-positions = <7 17 18 19 29 31>;
+    /* 直前にタイピングしていたら誤発動させない */
+    require-prior-idle-ms = <300>;
 };
 
 &trackball_central_listener {
     status = "okay";
     device = <&trackball_central>;
-    /* Keep scroll independent of pointer scaling. Emit one step per 60
+    /* zip_temp_layer を先頭に: ボール入力で MOUSE_W(4) を自動起動 (10000ms)。
+     * その後 既存の gesture/scroll/scaler チェーンを通す。
+     * Keep scroll independent of pointer scaling. Emit one step per 60
      * counts: gentler than 1/40, while retaining a lower onset threshold
      * than the original 1/100. Fractional counts are accumulated. */
-    input-processors = <&mg &scroll_runtime_input_processor &mouse_runtime_input_processor &zip_scroll_scaler 1 60 &inertial_scroll>;
+    input-processors = <&zip_temp_layer 4 10000 &mg &scroll_runtime_input_processor &mouse_runtime_input_processor &zip_scroll_scaler 1 60 &inertial_scroll>;
+
+    /* ジェスチャー層にいる間だけ、ボール入力をそのセット専用プロセッサへ回す。
+     * O 長押し=12 / − 長押し=13 / I+O コンボ=14 (keymap 側で層遷移)。 */
+    gesture_tab_lo {
+        layers = <12>;
+        input-processors = <&mg_tab &xy_block>;
+    };
+    gesture_edit_lo {
+        layers = <13>;
+        input-processors = <&mg_edit &xy_block>;
+    };
+    gesture_switch_lo {
+        layers = <14>;
+        input-processors = <&mg_switch &xy_block>;
+    };
 };

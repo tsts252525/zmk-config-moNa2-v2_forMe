@@ -1,0 +1,32 @@
+# JIS layout shift (US keycap -> JIS OS layout conversion for &kp)
+
+config ZMK_JIS_LAYOUT_SHIFT
+    bool "US -> JIS keycode conversion for &kp"
+    default y
+    depends on DT_HAS_ZMK_BEHAVIOR_JIS_KEY_PRESS_ENABLED
+    help
+      Converts &kp keycodes so that a US-layout keyboard types the symbols
+      printed on its keycaps when the host OS is configured for the JIS
+      (Japanese) layout. Conversion is switched on/off with &tog_ls.
+
+if ZMK_JIS_LAYOUT_SHIFT
+
+config ZMK_JIS_LAYOUT_SHIFT_DEFAULT_ON
+    bool "Enable JIS conversion by default"
+    default n
+    help
+      Initial state used when no saved state exists.
+
+config ZMK_JIS_LAYOUT_SHIFT_PERSIST
+    bool "Save JIS conversion state across reboots"
+    default y
+    depends on SETTINGS
+    help
+      Saves the on/off state after CONFIG_ZMK_SETTINGS_SAVE_DEBOUNCE ms.
+
+config ZMK_JIS_LAYOUT_SHIFT_MAX_HELD
+    int "Maximum simultaneously held &kp keys tracked for release"
+    default 16
+    range 1 64
+
+endif
